@@ -6,177 +6,126 @@ namespace BinarySearchTree
 {
     class Tree
     {
-        private Node root;
+        public Node Root { get; set; }
 
-        private Node GetSuccessor(Node node)
+        public bool Add(int value)
         {
-            Node parentOfSuccessor = node;
-            Node successor = node;
-            Node current = node.RightNode;
+            Node before = null, after = this.Root;
 
-            while (current != null)
+            while (after != null)
             {
-                parentOfSuccessor = successor;
-                successor = current;
-                current = current.LeftNode;
-            }
-            if (successor != node.RightNode)
-            {
-                parentOfSuccessor.LeftNode = successor.RightNode;
-                successor.RightNode = node.RightNode;
-            }
-            successor.LeftNode = node.LeftNode;
-            return successor;
-
-        }
-
-        public Node Find(int data)
-        {
-            if (root != null)
-            {
-                return root.Find(data);
-            }    
-            else
-            {
-                return null;
-            }
-        }
-        public Nullable<int> Minimum()
-        {
-            if (root != null)
-            {
-                return root.Minimum();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public Nullable<int> Maximum()
-        {
-            if (root != null)
-            {
-                return root.Maximum();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public void Insert(int data)
-        {
-            if (root != null)
-            {
-                root.Insert(data);
-            }
-            else
-            {
-                root = new Node(data);
-            }
-        }
-        public void Delete(int data)
-        {
-            Node current = root;
-            Node parent = root;
-            bool isLeftChild = false;
-
-            if (current == null)
-            {
-                return;
-            }
-            while (current != null && current.Data != data)
-            {
-                parent = current;
-
-                if (data < current.Data)
+                before = after;
+                if (value < after.Data)
                 {
-                    current = current.LeftNode;
-                    isLeftChild = true;
+                    after = after.LeftNode;
+                }
+                else if (value > after.Data)
+                {
+                    after = after.RightNode;
                 }
                 else
                 {
-                    current = current.RightNode;
-                    isLeftChild = false;
-                }
-                
-            }
-            if (current == null)
-            {
-                return;
-            }
-            if (current.RightNode == null && current.LeftNode == null)
-            {
-                if (current == root)
-                {
-                    root = null;
-                }
-                else
-                {
-                    if (isLeftChild)
-                    {
-                        parent.LeftNode = null;
-                    }
-                    else
-                    {
-                        parent.RightNode = null;
-                    }
+                    return false;
                 }
             }
-            else if (current.RightNode == null)
+
+            Node newNode = new Node();
+            newNode.Data = value;
+
+            if (Root == null)
             {
-                if (current == root)
-                {
-                    root = current.LeftNode;
-                }
-                else
-                {
-                    if (isLeftChild)
-                    {
-                        parent.LeftNode = current.LeftNode;
-                    }
-                    else
-                    {
-                        parent.RightNode = current.LeftNode;
-                    }
-                }
-            }
-            else if (current.LeftNode == null)
-            {
-                if (current == root)
-                {
-                    root = current.RightNode;
-                }
-                else
-                {
-                    if (isLeftChild)
-                    {
-                        parent.LeftNode = current.RightNode;
-                    }
-                    else
-                    {
-                        parent.RightNode = current.RightNode;
-                    }
-                }
+                Root = newNode;
             }
             else
             {
-                Node successor = GetSuccessor(current);
-                
-                if (current == root)
+                if (value < before.Data)
                 {
-                    root = successor;
-                }
-                else if (isLeftChild)
-                {
-                    parent.LeftNode = successor;
+                    before.LeftNode = newNode;
                 }
                 else
                 {
-                    parent.RightNode = successor;
+                    before.RightNode = newNode;
                 }
             }
+
+            return true;
         }
+
+        public Node Find(int value)
+        {
+            return Find(value, Root);
+        }
+
+        public void Remove(int value)
+        {
+            Root = Remove(Root, value);
+        }
+
+        private Node Remove(Node parent, int key)
+        {
+            if (parent == null) return parent;
+
+            if (key < parent.Data)
+            {
+                parent.LeftNode = Remove(parent.LeftNode, key);
+            }
+            else if (key > parent.Data)
+            {
+                parent.RightNode = Remove(parent.RightNode, key);
+            }
+
+            else
+            {
+                if (parent.LeftNode == null)
+                {
+                    return parent.RightNode;
+                }
+                else if (parent.RightNode == null)
+                {
+                    return parent.LeftNode;
+                }
+                parent.Data = MinValue(parent.RightNode);
+
+                parent.RightNode = Remove(parent.RightNode, parent.Data);
+            }
+
+            return parent;
+        }
+
+        private int MinValue(Node node)
+        {
+            int minv = node.Data;
+
+            while (node.LeftNode != null)
+            {
+                minv = node.LeftNode.Data;
+                node = node.LeftNode;
+            }
+
+            return minv;
+        }
+
+        private Node Find(int value, Node parent)
+        {
+            if (parent != null)
+            {
+                if (value == parent.Data)
+                {
+                    return parent; 
+                }
+                if (value < parent.Data)
+                {
+                    return Find(value, parent.LeftNode);
+                }
+                else
+                {
+                    return Find(value, parent.RightNode);
+                }
+            }
+
+            return null;
+        }
+
 
     }
 }
