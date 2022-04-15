@@ -9,13 +9,23 @@ namespace BinarySearchTree
             Console.WriteLine("Binary Search Tree!");
 
             Tree<int> binaryTree = new Tree<int>();
-
+            Node<int> test = new Node<int>(4);
 
             binaryTree.Add(5);
             binaryTree.Add(4);
             binaryTree.Add(7);
             binaryTree.Add(3);
 
+            ;
+            bool didRemove = binaryTree.Remove(test);
+
+            Console.WriteLine(didRemove);
+
+            
+
+            //int value = binaryTree.Find(3);
+
+            //Console.WriteLine(value);
 
             //for (int i = 0; i < 1500000; i++)
             //{

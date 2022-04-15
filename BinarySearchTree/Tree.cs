@@ -6,126 +6,156 @@ namespace BinarySearchTree
 {
     class Tree<T> where T : IComparable<T>
     {
-        public Node<T> Root { get; set; }
+        public Node<T> Root { get; private set; }
 
-        public bool Add(T value)
+        public void Add(T value)
         {
-            Node<T> before = null, after = this.Root;
+            Node<T> temp = new Node<T>(value);
 
-            while (after != null)
+            if(Root == null)
             {
-                before = after;
-                if (value < after.Data)
+                Root = temp;
+                return;
+            }
+
+            Node<T> current = Root;
+
+            while (true)
+            {
+                if (value.CompareTo(current.Data) < 0)
                 {
-                    after = after.LeftNode;
+                    if (current.LeftNode == null)
+                    {
+                        current.LeftNode = temp;
+                        return;
+                    }
+                    current = current.LeftNode;
                 }
-                else if (value > after.Data)
+                else if (value.CompareTo(current.Data) >= 0)
                 {
-                    after = after.RightNode;
+                    if(current.RightNode == null)
+                    {
+                        current.RightNode = temp;
+                        return;
+                    }
+                    current = current.RightNode;
+                }
+            }
+        }
+
+        //public Node<T> FindMaxLeft(Node<T> node)
+        //{
+        //    while (node.LeftNode.RightNode != null)
+        //    {
+        //        node.LeftNode.RightNode = node.LeftNode.RightNode.RightNode;
+        //    }
+
+        //    return node;
+
+        //}
+        //public Node<T> FindMinRight(Node<T> node)
+        //{
+        //    while (node.RightNode.LeftNode!= null)
+        //    {
+        //        node.RightNode.LeftNode = node.LeftNode.LeftNode.LeftNode;
+        //    }
+
+        //    return node;
+
+        //}
+
+        public bool Remove(Node<T> node)
+        {
+            if (node == null) return false;
+
+            Node<T> current = Root;
+
+            while (current != null)
+            {
+                if (node.Data.CompareTo(current.Data) < 0)
+                {
+                    if (current.LeftNode.Data.CompareTo(node.Data) == 0)
+                    {
+                        if (current.LeftNode.LeftNode == null && current.LeftNode.RightNode == null) // 0 child
+                        {
+                            current.LeftNode = null;
+                            return true;
+                        }
+                        else if (current.LeftNode.LeftNode == null && current.LeftNode.RightNode != null) // 1 child
+                        {
+                            current.LeftNode = current.LeftNode.RightNode;
+                            return true;
+                        }
+                        else if (current.LeftNode.LeftNode != null && current.LeftNode.RightNode == null) // 1 child
+                        {
+                            current.LeftNode = current.LeftNode.LeftNode;
+                            return true;
+                        }
+                        else if (current.LeftNode.LeftNode != null && current.LeftNode.RightNode != null) // 2 child
+                        {
+                            current = FindMaxLeft(current);
+                            return true;
+                        }
+                        return true;
+                    }
+                    current = current.LeftNode;
+                }
+                else if (node.Data.CompareTo(current.Data) > 0)
+                {
+                    if (current.RightNode.Data.CompareTo(node.Data) == 0)
+                    {
+                        if (current.RightNode.LeftNode == null && current.RightNode.RightNode == null) // 0 child
+                        {
+                            current.RightNode = null;
+                            return true;
+                        }
+                        else if (current.RightNode.LeftNode == null && current.RightNode.RightNode != null) // 1 child
+                        {
+                            current.RightNode = current.RightNode.RightNode;
+                            return true;
+                        }
+                        else if (current.RightNode.LeftNode != null && current.RightNode.RightNode == null) // 1 child
+                        {
+                            current.RightNode = current.RightNode.LeftNode;
+                            return true;
+                        }
+                        else if (current.RightNode.LeftNode != null && current.RightNode.RightNode != null) // 2 children
+                        {
+                            current = FindMaxLeft(current);
+                            return true;
+                        }
+
+                        return true;
+                    }
+                    current = current.RightNode;
                 }
                 else
                 {
                     return false;
                 }
             }
-
-            Node<T> newNode = new Node<T>();
-            newNode.Data = value;
-
-            if (Root == null)
-            {
-                Root = newNode;
-            }
-            else
-            {
-                if (value < before.Data)
-                {
-                    before.LeftNode = newNode;
-                }
-                else
-                {
-                    before.RightNode = newNode;
-                }
-            }
-
-            return true;
+            return false;
         }
 
         public Node<T> Find(T value)
         {
-            return Find(value, Root);
-        }
+            Node<T> current = Root;
 
-        public void Remove(T value)
-        {
-            Root = Remove(Root, value);
-        }
-
-        private Node<T> Remove(Node<T> parent, int key)
-        {
-            if (parent == null) return parent;
-
-            if (key < parent.Data)
+            while (current != null)
             {
-                parent.LeftNode = Remove(parent.LeftNode, key);
-            }
-            else if (key > parent.Data)
-            {
-                parent.RightNode = Remove(parent.RightNode, key);
-            }
+                if (current.Data.CompareTo(value) == 0) return current;
 
-            else
-            {
-                if (parent.LeftNode == null)
+                if (value.CompareTo(current.Data) < 0)
                 {
-                    return parent.RightNode;
-                }
-                else if (parent.RightNode == null)
-                {
-                    return parent.LeftNode;
-                }
-                parent.Data = MinValue(parent.RightNode);
-
-                parent.RightNode = Remove(parent.RightNode, parent.Data);
-            }
-
-            return parent;
-        }
-
-        private int MinValue(Node<T> node)
-        {
-            int minv = node.Data;
-
-            while (node.LeftNode != null)
-            {
-                minv = node.LeftNode.Data;
-                node = node.LeftNode;
-            }
-
-            return minv;
-        }
-
-        private Node<T> Find(T value, Node<T> parent)
-        {
-            if (parent != null)
-            {
-                if (value == parent.Data)
-                {
-                    return parent; 
-                }
-                if (value < parent.Data)
-                {
-                    return Find(value, parent.LeftNode);
+                    current = current.LeftNode;
                 }
                 else
                 {
-                    return Find(value, parent.RightNode);
+                    current = current.RightNode;
                 }
             }
 
-            return null;
-        }
-
-
+            return default;
+        }    
     }
 }
