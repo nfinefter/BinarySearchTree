@@ -10,7 +10,11 @@ namespace BinarySearchTree
 
             Tree binaryTree = new Tree();
 
-            binaryTree.Insert(75);
+            for (int i = 0; i < 1500000; i++)
+            {
+                binaryTree.Add(i);
+            }
+           //WORKS atleast at home no stack overflow
         }
     }
 }
