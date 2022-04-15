@@ -4,13 +4,13 @@ using System.Text;
 
 namespace BinarySearchTree
 {
-    class Tree
+    class Tree<T> where T : IComparable<T>
     {
-        public Node Root { get; set; }
+        public Node<T> Root { get; set; }
 
-        public bool Add(int value)
+        public bool Add(T value)
         {
-            Node before = null, after = this.Root;
+            Node<T> before = null, after = this.Root;
 
             while (after != null)
             {
@@ -29,7 +29,7 @@ namespace BinarySearchTree
                 }
             }
 
-            Node newNode = new Node();
+            Node<T> newNode = new Node<T>();
             newNode.Data = value;
 
             if (Root == null)
@@ -51,17 +51,17 @@ namespace BinarySearchTree
             return true;
         }
 
-        public Node Find(int value)
+        public Node<T> Find(T value)
         {
             return Find(value, Root);
         }
 
-        public void Remove(int value)
+        public void Remove(T value)
         {
             Root = Remove(Root, value);
         }
 
-        private Node Remove(Node parent, int key)
+        private Node<T> Remove(Node<T> parent, int key)
         {
             if (parent == null) return parent;
 
@@ -92,7 +92,7 @@ namespace BinarySearchTree
             return parent;
         }
 
-        private int MinValue(Node node)
+        private int MinValue(Node<T> node)
         {
             int minv = node.Data;
 
@@ -105,7 +105,7 @@ namespace BinarySearchTree
             return minv;
         }
 
-        private Node Find(int value, Node parent)
+        private Node<T> Find(T value, Node<T> parent)
         {
             if (parent != null)
             {

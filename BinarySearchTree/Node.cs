@@ -4,10 +4,10 @@ using System.Text;
 
 namespace BinarySearchTree
 {
-    class Node
+    class Node<T>
     {
-        public Node LeftNode { get; set; }
-        public Node RightNode { get; set; }
-        public int Data { get; set; }
+        public Node<T> LeftNode { get; set; }
+        public Node<T> RightNode { get; set; }
+        public T Data { get; set; }
     }
 }
