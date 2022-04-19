@@ -43,26 +43,33 @@ namespace BinarySearchTree
             }
         }
 
-        //public Node<T> FindMaxLeft(Node<T> node)
-        //{
-        //    while (node.LeftNode.RightNode != null)
-        //    {
-        //        node.LeftNode.RightNode = node.LeftNode.RightNode.RightNode;
-        //    }
+        public Node<T> FindMin(Node<T> root)
+        {
+            Node<T> curr = root;
+            if (curr.LeftNode == null) return root;
+         
+            while (curr.LeftNode != null)
+            {
+                curr = curr.LeftNode;
+            }    
 
-        //    return node;
+            return curr;
 
-        //}
-        //public Node<T> FindMinRight(Node<T> node)
-        //{
-        //    while (node.RightNode.LeftNode!= null)
-        //    {
-        //        node.RightNode.LeftNode = node.LeftNode.LeftNode.LeftNode;
-        //    }
+        }
+        public Node<T> FindMax(Node<T> root)
+        {
+            Node<T> curr = root;
+            if (curr.RightNode == null) return root;
 
-        //    return node;
+            while (curr.RightNode != null)
+            {
+                curr = curr.RightNode;
+            }
 
-        //}
+
+            return curr;
+
+        }
 
         public bool Remove(Node<T> node)
         {
@@ -93,7 +100,7 @@ namespace BinarySearchTree
                         }
                         else if (current.LeftNode.LeftNode != null && current.LeftNode.RightNode != null) // 2 child
                         {
-                            current = FindMaxLeft(current);
+                            current = FindMin(current);
                             return true;
                         }
                         return true;
@@ -121,7 +128,8 @@ namespace BinarySearchTree
                         }
                         else if (current.RightNode.LeftNode != null && current.RightNode.RightNode != null) // 2 children
                         {
-                            current = FindMaxLeft(current);
+                            current = FindMax(current);
+                            
                             return true;
                         }
 

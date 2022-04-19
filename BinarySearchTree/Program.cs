@@ -15,8 +15,11 @@ namespace BinarySearchTree
             binaryTree.Add(4);
             binaryTree.Add(7);
             binaryTree.Add(3);
-
-            ;
+            binaryTree.Add(13);
+            binaryTree.Add(14);
+            test = binaryTree.FindMax(binaryTree.Root);
+            Console.WriteLine(test.Data);
+            ;//Delete function help
             bool didRemove = binaryTree.Remove(test);
 
             Console.WriteLine(didRemove);
