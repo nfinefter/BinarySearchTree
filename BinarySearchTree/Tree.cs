@@ -8,6 +8,8 @@ namespace BinarySearchTree
     {
         public Node<T> Root { get; private set; }
 
+
+
         public void Add(T value)
         {
             Node<T> temp = new Node<T>(value);
@@ -56,12 +58,12 @@ namespace BinarySearchTree
             return curr;
 
         }
-        public Node<T> FindMax(Node<T> root)
+        public Node<T> FindBeforeMax(Node<T> root)
         {
             Node<T> curr = root;
             if (curr.RightNode == null) return root;
 
-            while (curr.RightNode != null)
+            while (curr.RightNode.RightNode != null)
             {
                 curr = curr.RightNode;
             }
@@ -70,7 +72,23 @@ namespace BinarySearchTree
             return curr;
 
         }
+        private void DeleteTwoChild (Node<T> node)
+        {
+            Node<T> Replacer = FindBeforeMax(node.LeftNode);
 
+            if (Replacer.RightNode == null)
+            {
+                node.Data = Replacer.Data;
+                node.LeftNode = Replacer.LeftNode;
+                return;
+            }
+
+            node.LeftNode.Data = Replacer.RightNode.Data;
+
+            Replacer.RightNode = Replacer.RightNode.LeftNode;
+
+            return;
+        }
         public bool Remove(Node<T> node)
         {
             if (node == null) return false;
@@ -81,6 +99,7 @@ namespace BinarySearchTree
             {
                 if (node.Data.CompareTo(current.Data) < 0)
                 {
+                    //current might be parent
                     if (current.LeftNode.Data.CompareTo(node.Data) == 0)
                     {
                         if (current.LeftNode.LeftNode == null && current.LeftNode.RightNode == null) // 0 child
@@ -100,8 +119,7 @@ namespace BinarySearchTree
                         }
                         else if (current.LeftNode.LeftNode != null && current.LeftNode.RightNode != null) // 2 child
                         {
-                            current = FindMin(current);
-                            return true;
+                            DeleteTwoChild(current.LeftNode);
                         }
                         return true;
                     }
@@ -128,9 +146,7 @@ namespace BinarySearchTree
                         }
                         else if (current.RightNode.LeftNode != null && current.RightNode.RightNode != null) // 2 children
                         {
-                            current = FindMax(current);
-                            
-                            return true;
+                            DeleteTwoChild(current.RightNode);
                         }
 
                         return true;

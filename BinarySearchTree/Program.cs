@@ -11,15 +11,18 @@ namespace BinarySearchTree
             Tree<int> binaryTree = new Tree<int>();
             Node<int> test = new Node<int>(4);
 
+            binaryTree.Add(6);
             binaryTree.Add(5);
-            binaryTree.Add(4);
             binaryTree.Add(7);
             binaryTree.Add(3);
             binaryTree.Add(13);
             binaryTree.Add(14);
-            test = binaryTree.FindMax(binaryTree.Root);
+            binaryTree.Add(4);
+            binaryTree.Add(2);
+            test = binaryTree.FindBeforeMax(binaryTree.Root);
             Console.WriteLine(test.Data);
-            ;//Delete function help
+            //Check Deletes
+            test.Data = 3;
             bool didRemove = binaryTree.Remove(test);
 
             Console.WriteLine(didRemove);
