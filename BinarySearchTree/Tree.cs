@@ -8,7 +8,42 @@ namespace BinarySearchTree
     {
         public Node<T> Root { get; private set; }
 
+        public List<Node<T>> InOrderTraversal()
+        {
+            Node<T> curr = Root;
 
+            if (curr == null) return null;
+
+            List<Node<T>> nodes = new List<Node<T>>();
+
+            Stack<Node<T>> stack = new Stack<Node<T>>();
+
+            while (curr != null)
+            {
+                while (curr.LeftNode != null)
+                {
+                    stack.Push(curr);
+
+                    curr = curr.LeftNode;
+                }
+                while (curr.RightNode == null)
+                {
+                    Node<T> item = stack.Pop();
+
+                    nodes.Add(item);
+
+                    curr = item;
+                }
+                while (curr.RightNode != null)
+                {
+                    curr = curr.RightNode;
+                    nodes.Add(curr);
+                }
+                curr = curr.LeftNode;
+            }
+            //Fix traversal
+            return nodes;
+        }
 
         public void Add(T value)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BinarySearchTree
 {
@@ -10,6 +11,8 @@ namespace BinarySearchTree
 
             Tree<int> binaryTree = new Tree<int>();
             Node<int> test = new Node<int>(60);
+            List<Node<int>> list = new List<Node<int>>();
+
 
             binaryTree.Add(50);
             binaryTree.Add(60);
@@ -20,9 +23,12 @@ namespace BinarySearchTree
             binaryTree.Add(25);
             binaryTree.Add(55);
 
-            bool didRemove = binaryTree.Remove(test);
+            list = binaryTree.InOrderTraversal();
 
-            Console.WriteLine(didRemove);
+            for (int i = 0; i < list.Count; i++)
+            {
+                Console.WriteLine(list[i].Data);
+            }
             //check if the two child delete works properly
             
         }
