@@ -21,16 +21,18 @@ namespace BinarySearchTree
             binaryTree.Add(45);
             binaryTree.Add(65);
             binaryTree.Add(25);
-            binaryTree.Add(55);
 
-            list = binaryTree.InOrderTraversal();
+            //list = binaryTree.InOrderRecursive();
+            //list = binaryTree.PostOrderRecursive();
+            test = binaryTree.FindRecursive(25);
+
+            Console.WriteLine(test.Data);
 
             for (int i = 0; i < list.Count; i++)
             {
+                
                 Console.WriteLine(list[i].Data);
             }
-            //check if the two child delete works properly
-            
         }
     }
 }

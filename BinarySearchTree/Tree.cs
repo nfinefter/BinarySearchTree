@@ -12,9 +12,9 @@ namespace BinarySearchTree
         {
             Node<T> curr = Root;
 
-            if (curr == null) return null;
-
             List<Node<T>> nodes = new List<Node<T>>();
+
+            if (curr == null) return nodes;
 
             Stack<Node<T>> stack = new Stack<Node<T>>();
 
@@ -29,42 +29,93 @@ namespace BinarySearchTree
                 nodes.Add(curr);
                 curr = curr.RightNode;
             }
-
-
-
-            //while (curr != null)
-            //{
-            //    while (curr.LeftNode != null)
-            //    {
-            //        stack.Push(curr);
-
-            //        curr = curr.LeftNode;
-            //    }
-            //    while (curr.RightNode == null)
-            //    {
-            //        Node<T> item = stack.Pop();
-
-            //        nodes.Add(item);
-
-            //        curr = item;
-            //    }
-            //    while (curr.RightNode != null)
-            //    {
-            //        curr = curr.RightNode;
-            //        nodes.Add(curr);
-            //    }
-            //    curr = curr.LeftNode;
-            //}
-
-            //Fix traversal
             return nodes;
+        }
+
+        public List<Node<T>> PreOrderTransversal()
+        {
+            Node<T> curr = Root;
+
+            List<Node<T>> nodes = new List<Node<T>>();
+
+            if (curr == null) return nodes;
+
+            Stack<Node<T>> stack = new Stack<Node<T>>();
+
+            stack.Push(Root);
+
+            while (stack.Count != 0)
+            {
+                curr = stack.Pop();
+
+                nodes.Add(curr);
+
+                if (curr.RightNode != null)
+                {
+                    stack.Push(curr.RightNode);
+                }
+                if (curr.LeftNode != null)
+                {
+                    stack.Push(curr.LeftNode);
+                }
+            }
+
+            return nodes;
+        }
+
+        public List<Node<T>> PreOrderRecursive()
+        {
+            List<Node<T>> nodes = new List<Node<T>>();
+            PreOrderRecursive(Root, nodes);
+            return nodes;
+        }
+
+        private void PreOrderRecursive(Node<T> curr, List<Node<T>> nodes)
+        {
+            if (curr == null) return;
+            nodes.Add(curr);
+
+            PreOrderRecursive(curr.LeftNode, nodes);
+            PreOrderRecursive(curr.RightNode, nodes);
+        }
+
+        public List<Node<T>> InOrderRecursive()
+        {
+            List<Node<T>> nodes = new List<Node<T>>();
+            InOrderRecursive(Root, nodes);
+            return nodes;
+        }
+
+        private void InOrderRecursive(Node<T> curr, List<Node<T>> nodes)
+        {
+            if (curr == null) return;
+          
+            InOrderRecursive(curr.LeftNode, nodes);
+            nodes.Add(curr);
+            InOrderRecursive(curr.RightNode, nodes);
+        }
+
+        public List<Node<T>> PostOrderRecursive()
+        {
+            List<Node<T>> nodes = new List<Node<T>>();
+            PostOrderRecursive(Root, nodes);
+            return nodes;
+        }
+
+        private void PostOrderRecursive(Node<T> curr, List<Node<T>> nodes)
+        {
+            if (curr == null) return;
+
+            PostOrderRecursive(curr.LeftNode, nodes);
+            PostOrderRecursive(curr.RightNode, nodes);
+            nodes.Add(curr);
         }
 
         public void Add(T value)
         {
             Node<T> temp = new Node<T>(value);
 
-            if(Root == null)
+            if (Root == null)
             {
                 Root = temp;
                 return;
@@ -85,7 +136,7 @@ namespace BinarySearchTree
                 }
                 else if (value.CompareTo(current.Data) >= 0)
                 {
-                    if(current.RightNode == null)
+                    if (current.RightNode == null)
                     {
                         current.RightNode = temp;
                         return;
@@ -98,16 +149,15 @@ namespace BinarySearchTree
         public Node<T> FindMin(Node<T> root)
         {
             Node<T> curr = root;
-            if (curr.LeftNode == null) return root;
-         
+
             while (curr.LeftNode != null)
             {
                 curr = curr.LeftNode;
-            }    
+            }
 
             return curr;
-
         }
+
         public Node<T> FindBeforeMax(Node<T> root)
         {
             Node<T> curr = root;
@@ -118,11 +168,10 @@ namespace BinarySearchTree
                 curr = curr.RightNode;
             }
 
-
             return curr;
-
         }
-        private void DeleteTwoChild (Node<T> node)
+
+        private void DeleteTwoChild(Node<T> node)
         {
             Node<T> Replacer = FindBeforeMax(node.LeftNode);
 
@@ -136,9 +185,8 @@ namespace BinarySearchTree
             node.LeftNode.Data = Replacer.RightNode.Data;
 
             Replacer.RightNode = Replacer.RightNode.LeftNode;
-
-            return;
         }
+
         public bool Remove(Node<T> node)
         {
             if (node == null) return false;
@@ -230,6 +278,29 @@ namespace BinarySearchTree
             }
 
             return default;
-        }    
+        }
+
+        public Node<T> FindRecursive(T value)
+        {
+            return FindRecursive(value, Root);
+        }
+
+        private Node<T> FindRecursive(T value, Node<T> curr)
+        {
+            if (curr == null) return null;
+
+            if (curr.Data.CompareTo(value) == 0)
+            {
+                return curr;
+            }
+            else if (value.CompareTo(curr.Data) > 0)
+            {
+                return FindRecursive(value, curr.RightNode);
+            }
+            else
+            {
+                return FindRecursive(value, curr.LeftNode);
+            }
+        }
     }
 }
