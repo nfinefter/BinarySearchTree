@@ -18,29 +18,44 @@ namespace BinarySearchTree
 
             Stack<Node<T>> stack = new Stack<Node<T>>();
 
-            while (curr != null)
+            while (curr != null || stack.Count != 0)
             {
-                while (curr.LeftNode != null)
+                while (curr != null)
                 {
                     stack.Push(curr);
-
                     curr = curr.LeftNode;
                 }
-                while (curr.RightNode == null)
-                {
-                    Node<T> item = stack.Pop();
-
-                    nodes.Add(item);
-
-                    curr = item;
-                }
-                while (curr.RightNode != null)
-                {
-                    curr = curr.RightNode;
-                    nodes.Add(curr);
-                }
-                curr = curr.LeftNode;
+                curr = stack.Pop();
+                nodes.Add(curr);
+                curr = curr.RightNode;
             }
+
+
+
+            //while (curr != null)
+            //{
+            //    while (curr.LeftNode != null)
+            //    {
+            //        stack.Push(curr);
+
+            //        curr = curr.LeftNode;
+            //    }
+            //    while (curr.RightNode == null)
+            //    {
+            //        Node<T> item = stack.Pop();
+
+            //        nodes.Add(item);
+
+            //        curr = item;
+            //    }
+            //    while (curr.RightNode != null)
+            //    {
+            //        curr = curr.RightNode;
+            //        nodes.Add(curr);
+            //    }
+            //    curr = curr.LeftNode;
+            //}
+
             //Fix traversal
             return nodes;
         }
