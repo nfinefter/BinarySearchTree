@@ -5,14 +5,25 @@ namespace BinarySearchTree
 {
     class Program
     {
+        static void NullObject(Node<int> item)
+        {
+            item.LeftNode = null;
+        }
+
         static void Main(string[] args)
         {
+
             Console.WriteLine("Binary Search Tree!");
 
             Tree<int> binaryTree = new Tree<int>();
             Node<int> test = new Node<int>(60);
             List<Node<int>> list = new List<Node<int>>();
 
+
+            NullObject(test);
+            Console.WriteLine(test.Data);
+
+            
 
             binaryTree.Add(50);
             binaryTree.Add(60);
