@@ -146,45 +146,38 @@ namespace BinarySearchTree
             }
         }
 
-        public Node<T> FindMin(Node<T> root)
+        public void RecursiveAdd(T value)
         {
-            Node<T> curr = root;
-
-            while (curr.LeftNode != null)
-            {
-                curr = curr.LeftNode;
-            }
-
-            return curr;
+            RecursiveAdd(Root, value);
         }
 
-        public Node<T> FindBeforeMax(Node<T> root)
+        private void RecursiveAdd(Node<T> curr, T value)
         {
-            Node<T> curr = root;
-            if (curr.RightNode == null) return root;
 
-            while (curr.RightNode.RightNode != null)
-            {
-                curr = curr.RightNode;
+            Node<T> node = new Node<T>(value);
+
+            if (value.CompareTo(curr.Data) > 0)
+            {  
+                if (curr.RightNode == null)
+                {
+                    curr.RightNode = node;
+                }
+                else
+                {
+                    RecursiveAdd(curr.RightNode, value);
+                }
             }
-
-            return curr;
-        }
-
-        private void DeleteTwoChild(Node<T> node)
-        {
-            Node<T> Replacer = FindBeforeMax(node.LeftNode);
-
-            if (Replacer.RightNode == null)
+            else
             {
-                node.Data = Replacer.Data;
-                node.LeftNode = Replacer.LeftNode;
-                return;
+                if (curr.LeftNode == null)
+                {
+                    curr.LeftNode = node;
+                }
+                else
+                {
+                    RecursiveAdd(curr.LeftNode, value);
+                }
             }
-
-            node.LeftNode.Data = Replacer.RightNode.Data;
-
-            Replacer.RightNode = Replacer.RightNode.LeftNode;
         }
 
         public bool Remove(Node<T> node)
@@ -258,6 +251,59 @@ namespace BinarySearchTree
             }
             return false;
         }
+
+        public void RecursiveDel(T value)
+        {
+            RecursiveDel(Root, value);
+        }
+
+        private void RecursiveDel(Node<T> curr, T value)
+        {
+
+        }
+
+        public Node<T> FindMin(Node<T> root)
+        {
+            Node<T> curr = root;
+
+            while (curr.LeftNode != null)
+            {
+                curr = curr.LeftNode;
+            }
+
+            return curr;
+        }
+
+        public Node<T> FindBeforeMax(Node<T> root)
+        {
+            Node<T> curr = root;
+            if (curr.RightNode == null) return root;
+
+            while (curr.RightNode.RightNode != null)
+            {
+                curr = curr.RightNode;
+            }
+
+            return curr;
+        }
+
+        private void DeleteTwoChild(Node<T> node)
+        {
+            Node<T> Replacer = FindBeforeMax(node.LeftNode);
+
+            if (Replacer.RightNode == null)
+            {
+                node.Data = Replacer.Data;
+                node.LeftNode = Replacer.LeftNode;
+                return;
+            }
+
+            node.LeftNode.Data = Replacer.RightNode.Data;
+
+            Replacer.RightNode = Replacer.RightNode.LeftNode;
+        }
+
+       
 
         public Node<T> Find(T value)
         {

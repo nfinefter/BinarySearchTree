@@ -20,10 +20,10 @@ namespace BinarySearchTree
             binaryTree.Add(30);
             binaryTree.Add(45);
             binaryTree.Add(65);
-            binaryTree.Add(25);
+            binaryTree.RecursiveAdd(25);
 
-            //list = binaryTree.InOrderRecursive();
-            //list = binaryTree.PostOrderRecursive();
+            list = binaryTree.InOrderRecursive();
+            list = binaryTree.PostOrderRecursive();
             test = binaryTree.FindRecursive(25);
 
             Console.WriteLine(test.Data);
