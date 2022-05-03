@@ -5,10 +5,6 @@ namespace BinarySearchTree
 {
     class Program
     {
-        static void NullObject(Node<int> item)
-        {
-            item.LeftNode = null;
-        }
 
         static void Main(string[] args)
         {
@@ -16,14 +12,6 @@ namespace BinarySearchTree
             Console.WriteLine("Binary Search Tree!");
 
             Tree<int> binaryTree = new Tree<int>();
-            Node<int> test = new Node<int>(60);
-            List<Node<int>> list = new List<Node<int>>();
-
-
-            NullObject(test);
-            Console.WriteLine(test.Data);
-
-            
 
             binaryTree.Add(50);
             binaryTree.Add(60);
@@ -31,17 +19,12 @@ namespace BinarySearchTree
             binaryTree.Add(30);
             binaryTree.Add(45);
             binaryTree.Add(65);
-            binaryTree.RecursiveAdd(25);
+            binaryTree.Remove(45);
 
-            list = binaryTree.InOrderRecursive();
-            list = binaryTree.PostOrderRecursive();
-            test = binaryTree.FindRecursive(25);
-
-            Console.WriteLine(test.Data);
+            List<Node<int>> list = binaryTree.PreOrderRecursive();
 
             for (int i = 0; i < list.Count; i++)
             {
-                
                 Console.WriteLine(list[i].Data);
             }
         }

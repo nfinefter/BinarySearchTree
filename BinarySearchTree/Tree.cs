@@ -8,8 +8,6 @@ namespace BinarySearchTree
     {
         public Node<T> Root { get; private set; }
 
-        private bool IsLeftChild;
-
         public List<Node<T>> InOrderTraversal()
         {
             Node<T> curr = Root;
@@ -186,151 +184,88 @@ namespace BinarySearchTree
 
             RecursiveAdd(curr, nodeToInsert);
         }
-        //TODO: make small functions for Remove
 
-        public bool Remove(Node<T> node)
+        public bool Remove(T value)
         {
-            if (node == null) return false;
+            if(Root.Data.CompareTo(value) == 0)
+            {
+                Root = DeleteNode(Root);
+            }
 
             Node<T> current = Root;
 
             while (current != null)
             {
-                if (node.Data.CompareTo(current.Data) < 0)
+                if (value.CompareTo(current.Data) < 0)
                 {
-                    //current might be parent
-                    if (current.LeftNode.Data.CompareTo(node.Data) == 0)
+                    if(current.LeftNode == null)
                     {
-                        if (current.LeftNode.LeftNode == null && current.LeftNode.RightNode == null) // 0 child
-                        {
-                            DeleteLeaf(current, "left");
-                        }
-                        else if (current.LeftNode.LeftNode == null && current.LeftNode.RightNode != null) // 1 child
-                        {
-                            DeleteOneChild(current.LeftNode, "lft");
-                        }
-                        else if (current.LeftNode.LeftNode != null && current.LeftNode.RightNode == null) // 1 child
-                        {
-                            DeleteOneChild(current.LeftNode, "left");
-                        }
-                        else if (current.LeftNode.LeftNode != null && current.LeftNode.RightNode != null) // 2 child
-                        {
-                            DeleteTwoChild(current.LeftNode);
-                        }
+                        return false;
+                    }
+                    if (current.LeftNode.Data.CompareTo(value) == 0)
+                    {
+                        current.LeftNode = DeleteNode(current.LeftNode);
+
                         return true;
                     }
                     current = current.LeftNode;
                 }
-                else if (node.Data.CompareTo(current.Data) > 0)
+                else
                 {
-                    if (current.RightNode.Data.CompareTo(node.Data) == 0)
+                    if(current.RightNode == null)
                     {
-                        if (current.RightNode.LeftNode == null && current.RightNode.RightNode == null) // 0 child
-                        {
-                            DeleteLeaf(current, "right");
-                        }
-                        else if (current.RightNode.LeftNode == null && current.RightNode.RightNode != null) // 1 child
-                        {
-                            DeleteOneChild(current.RightNode, "right");
-                        }
-                        else if (current.RightNode.LeftNode != null && current.RightNode.RightNode == null) // 1 child
-                        {
-                            DeleteOneChild(current.RightNode, "right");
-                        }
-                        else if (current.RightNode.LeftNode != null && current.RightNode.RightNode != null) // 2 children
-                        {
-                            DeleteTwoChild(current.RightNode);
-                        }
+                        return false;
+                    }
+                    if (current.RightNode.Data.CompareTo(value) == 0)
+                    {
+                        current.RightNode = DeleteNode(current.RightNode);
 
                         return true;
                     }
                     current = current.RightNode;
                 }
-                else
-                {
-                    return false;
-                }
             }
             return false;
         }
-     
 
-        
-        private void DeleteLeaf(Node<T> node, string direction)
+        private Node<T> DeleteNode(Node<T> node)
         {
-            if (direction == "left")
+            if(node.LeftNode == null && node.RightNode == null)
             {
-                node.LeftNode = null;
+                return null;
             }
-            if (direction == "right")
+            else if(node.LeftNode == null && node.RightNode != null)
             {
-                node.RightNode = null;
+                return node.RightNode;
             }
-        }
-
-
-        private void DeleteOneChild(Node<T> node, string direction)
-        {
-            if (direction == "left")
+            else if (node.LeftNode != null && node.RightNode == null)
             {
-                if (node.LeftNode == null && node.LeftNode.RightNode != null)
+                return node.LeftNode;
+            }
+            else //two children
+            {
+                Node<T> curr = node.LeftNode;
+                Node<T> parent = node;
+
+                while (curr.RightNode != null)
                 {
-                    node.LeftNode = node.LeftNode.RightNode;
-                    return;
-                }
-                else if (node.LeftNode != null && node.RightNode == null)
-                {
-                    node.LeftNode = node.LeftNode.LeftNode;
-                    return;
+                    parent = curr;
+                    curr = curr.RightNode;
                 }
 
-            }
-            if (direction == "right")
-            {
-                if (node.RightNode.LeftNode == null && node.RightNode.RightNode != null)
+                node.Data = curr.Data;
+                if (parent.LeftNode == curr)
                 {
-                    node.RightNode = node.RightNode.RightNode;
-                    return;
+                    parent.LeftNode = DeleteNode(curr);
                 }
-                else if (node.LeftNode != null && node.RightNode == null)
+                else
                 {
-                    node.RightNode = node.RightNode.LeftNode;
-                    return;
+                    parent.RightNode = DeleteNode(curr);
                 }
+
+                return node;
             }
         }
-
-        public Node<T> FindBeforeMax(Node<T> root)
-        {
-            Node<T> curr = root;
-            if (curr.RightNode == null) return root;
-
-            while (curr.RightNode.RightNode != null)
-            {
-                curr = curr.RightNode;
-            }
-
-            return curr;
-        }
-
-
-        private void DeleteTwoChild(Node<T> node)
-        {
-            Node<T> Replacer = FindBeforeMax(node.LeftNode);
-
-            if (Replacer.RightNode == null)
-            {
-                node.Data = Replacer.Data;
-                node.LeftNode = Replacer.LeftNode;
-                return;
-            }
-
-            node.LeftNode.Data = Replacer.RightNode.Data;
-
-            Replacer.RightNode = Replacer.RightNode.LeftNode;
-        }
-
-       
 
         public Node<T> Find(T value)
         {
@@ -374,15 +309,6 @@ namespace BinarySearchTree
             {
                 return FindRecursive(value, curr.LeftNode);
             }
-        }
-        public void RecursiveDel(T value)
-        {
-            RecursiveDel(Root, value);
-        }
-
-        private void RecursiveDel(Node<T> curr, T value)
-        {
-
         }
 
         public Node<T> FindMin(Node<T> root)
